@@ -1,19 +1,16 @@
 "use client";
 
 import {useEffect, useState} from "react";
-import CardRanking from "@/components/CardRanking/CardRanking";
 import Gallery from "@/components/Gallery/Gallery";
+import {get} from "@/utils/request";
 
 export default function Page() {
 
 	const [data, setData] = useState<null | any>(null);
 
 	useEffect(() => {
-		if(!data){
-			fetch("https://api.jikan.moe/v4/top/anime")
-				.then(res => res.json())
-				.then(data => setData(data));
-		}
+		if(!data)
+			get("https://api.jikan.moe/v4/top/anime", setData);
 	}, []);
 
 	return (
