@@ -4,6 +4,7 @@ import {Input} from "antd";
 import {useEffect, useState} from "react";
 import Gallery from "@/components/Gallery/Gallery";
 import {LoadingOutlined} from "@ant-design/icons";
+import {get} from "@/utils/request";
 
 export default function Page(){
 
@@ -13,12 +14,8 @@ export default function Page(){
 	const [loading, setLoading] = useState<boolean>(false);
 
 	function search(){
-		fetch(`https://api.jikan.moe/v4/anime?q=${text}`)
-			.then(res => res.json())
-			.then(data => {
-				setData(data);
-				setLoading(false);
-			});
+		get(`https://api.jikan.moe/v4/anime?q=${text}`, setData);
+		setLoading(false);
 	}
 
 	useEffect(() => {
@@ -30,7 +27,6 @@ export default function Page(){
 			setData(null);
 		}
 	}, [text]);
-	console.log(data);
 
 	return (
 		<div className={"w-full h-full flex flex-col items-center justify-center"}>
@@ -40,10 +36,11 @@ export default function Page(){
 				onChange={(e) => {setText(e.target.value)}}
 				style={{
 					width: "33%",
-					marginBottom: 100
+					marginBottom: 100,
+					padding: "10px 20px"
 				}}/>
 			{loading && <LoadingOutlined />}
-			<Gallery data={data} />
+			{data && <Gallery data={data} />}
 		</div>
 	);
 }

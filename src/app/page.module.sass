@@ -1,0 +1,64 @@
+.bgo
+  background: url("https://cdn.myanimelist.net/s/common/uploaded_files/1602844304-cce49f36b262607b8528f758c120cb0c.png")
+
+.bgt
+  background: url("https://listium-res.cloudinary.com/image/upload/w_800,h_800,c_limit,q_auto,f_auto/dgn1wk3sf1hcaagpa9y8.jpg")
+
+.bgh
+  background: url("https://i.pinimg.com/736x/2a/34/3f/2a343f27717949cc8634a94f5d0943f3.jpg")
+
+@keyframes float
+
+  50%
+    transform: translateY(-6px)
+
+  100%
+    transform: translateY(6px)
+
+.bgo, .bgt, .bgh
+  height: 100%
+  width: 33%
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  background-size: cover
+  background-repeat: no-repeat
+  position: relative
+  z-index: 1
+
+  & > h3
+    color: white
+    font-size: 200%
+    width: 100%
+    text-align: center
+    z-index: 3
+    font-weight: bold
+    animation: float 2s infinite ease
+
+  & > button
+    z-index: 3
+    padding: 20px 50px
+    transition: transform .6s ease
+
+  & > button:hover
+    background: #000000 !important
+    cursor: pointer
+    transform: translateY(-10px)
+
+.bgt
+  width: 34%
+  border-right: 51px solid black
+  border-left: 51px solid black
+
+.blur
+  position: absolute
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
+  backdrop-filter: blur(10px)
+  z-index: 2
+
+
+
