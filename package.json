@@ -14,11 +14,11 @@
     "antd": "^5.23.2",
     "next": "15.1.6",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "sass": "^1.83.4"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@swc/core": "^1.10.9",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -27,7 +27,6 @@
     "nightwatch": "^3.11.0",
     "postcss": "^8.5.1",
     "tailwindcss": "4.0",
-    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }
