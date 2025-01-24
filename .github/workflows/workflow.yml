@@ -46,6 +46,10 @@ jobs:
       - name: Build Docker image
         run: docker build -t anime-guesser-app:${{ env.tag }} .
 
+      # Step 6: Run Docker container
+      - name: Run Docker container
+        run: docker run -d -p 3000:3000 --name anime-guesser-container anime-guesser-app:${{ env.tag }}
+
       # Step 6: Run Nightwatch tests
       - name: Run Nightwatch tests
         run: xvfb-run --auto-servernum npm test -- --env chrome
