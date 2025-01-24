@@ -1,0 +1,68 @@
+name: Build, Test, and Publish Docker Image
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '**' # Trigger on all PRs
+  release:
+    types: [published]
+
+jobs:
+  build-test-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'latest'
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Step 4: Run tests
+      - name: Run tests
+        run: npm run test
+
+      # Step 5: Determine Docker Tag
+      - name: Determine Docker tag
+        id: docker_tag
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "tag=pr-${{ github.sha }}" >> $GITHUB_ENV
+          elif [[ "${{ github.event_name }}" == "release" ]]; then
+            echo "tag=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+          else
+            echo "tag=${{ github.sha }}" >> $GITHUB_ENV
+          fi
+
+      # Step 6: Build Docker image
+      - name: Build Docker image
+        run: docker build -t anime-guesser-app:$tag .
+
+      # Step 7: Docker Hub login
+      - name: Docker Hub login
+        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      # Step 8: Push Docker image to Docker Hub
+      - name: Push Docker image to Docker Hub
+        run: |
+          docker tag anime-guesser-app:$tag ${{ secrets.DOCKERHUB_USERNAME }}/anime-guesser-app:$tag
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/anime-guesser-app:$tag
+
+      # Step 9: Clean up Docker container and image
+      - name: Clean up Docker container
+        if: always()
+        run: |
+          docker stop $(docker ps -a -q --filter "name=anime-guesser-container") || true
+          docker rm $(docker ps -a -q --filter "name=anime-guesser-container") || true
+          docker rmi anime-guesser-app:$tag || true
