@@ -1,0 +1,39 @@
+name: Build, Test, and Run with Docker
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build-test-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Build Docker image
+      - name: Build Docker image
+        run: docker build -t anime-guesser-app .
+
+      # Step 3: Run the Docker container
+      - name: Run Docker container
+        run: docker run -d -p 3000:3000 --name anime-guesser-container anime-guesser-app
+
+      # Step 4: Wait for the app to start (optional health check or delay)
+      - name: Wait for app to start
+        run: sleep 5 # Adjust as needed based on app startup time
+
+      # Step 5: Run tests
+      - name: Run tests
+        run: npm run test
+
+      # Step 6: Stop and remove the Docker container
+      - name: Clean up
+        if: always()
+        run: |
+          docker stop anime-guesser-container
+          docker rm anime-guesser-container
