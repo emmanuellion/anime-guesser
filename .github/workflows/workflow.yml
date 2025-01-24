@@ -28,12 +28,9 @@ jobs:
       # Step 3: Install dependencies
       - name: Install dependencies
         run: npm ci
+      - run: sudo apt-get install xvfb
 
-      # Step 4: Run tests
-      - name: Run tests
-        run: npm run test
-
-      # Step 5: Determine Docker Tag
+      # Step 4: Determine Docker Tag
       - name: Determine Docker tag
         id: docker_tag
         run: |
@@ -45,9 +42,14 @@ jobs:
             echo "tag=${{ github.sha }}" >> $GITHUB_ENV
           fi
 
-      # Step 6: Build Docker image
+      # Step 5: Build Docker image
       - name: Build Docker image
-        run: docker build -t anime-guesser-app:$tag .
+        run: docker build -t anime-guesser-app:${{ env.tag }} .
+
+      # Step 6: Run Nightwatch tests
+      - name: Run Nightwatch tests
+        run: |
+          run: xvfb-run --auto-servernum npm test -- --env chrome
 
       # Step 7: Docker Hub login
       - name: Docker Hub login
@@ -56,8 +58,8 @@ jobs:
       # Step 8: Push Docker image to Docker Hub
       - name: Push Docker image to Docker Hub
         run: |
-          docker tag anime-guesser-app:$tag ${{ secrets.DOCKERHUB_USERNAME }}/anime-guesser-app:$tag
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/anime-guesser-app:$tag
+          docker tag anime-guesser-app:${{ env.tag }} ${{ secrets.DOCKERHUB_USERNAME }}/anime-guesser-app:${{ env.tag }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/anime-guesser-app:${{ env.tag }}
 
       # Step 9: Clean up Docker container and image
       - name: Clean up Docker container
@@ -65,4 +67,4 @@ jobs:
         run: |
           docker stop $(docker ps -a -q --filter "name=anime-guesser-container") || true
           docker rm $(docker ps -a -q --filter "name=anime-guesser-container") || true
-          docker rmi anime-guesser-app:$tag || true
+          docker rmi anime-guesser-app:${{ env.tag }} || true
