@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "tests-e2e": "npx nightwatch .\\tests"
+    "test": "npx nightwatch ./tests"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.0.0",
