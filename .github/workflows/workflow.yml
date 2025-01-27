@@ -52,7 +52,9 @@ jobs:
 
       # Step 6: Run Nightwatch tests
       - name: Run Nightwatch tests
-        run: xvfb-run --auto-servernum npm test -- --env chrome
+        run: |
+          sleep 10
+          xvfb-run --auto-servernum npm test -- --env chrome
 
       # Step 7: Docker Hub login
       - name: Docker Hub login
