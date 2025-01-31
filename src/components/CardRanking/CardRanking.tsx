@@ -12,7 +12,7 @@ interface CardRankingProps{
 	description: string | null;
 }
 
-export default function CardRanking({img, name, episodes, score, rank, description}: CardRankingProps) {
+export default function CardRanking({img, name, score, rank, description}: CardRankingProps) {
 
 	const [loading, setLoading] = useState(true);
 

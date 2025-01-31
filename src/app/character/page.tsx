@@ -4,7 +4,6 @@ import {useEffect, useState} from "react";
 import {get} from "@/utils/request";
 import {Input} from "antd";
 import {LoadingOutlined} from "@ant-design/icons";
-import Gallery from "@/components/Gallery/Gallery";
 
 export default function Page(){
 	const [text, setText] = useState("");
