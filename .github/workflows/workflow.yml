@@ -56,12 +56,9 @@ jobs:
           sleep 10
           xvfb-run --auto-servernum npm test -- --env chrome
 
-      # Step 8: Login to DockerHub
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      # Step 8: Docker Hub login
+      - name: Docker Hub login
+        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
       # Step 9: Push Docker image to Docker Hub
       - name: Push Docker image to Docker Hub
